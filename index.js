@@ -2,6 +2,7 @@
 const mongoose = require("mongoose")
 const express = require("express")
 const cors = require("cors")
+const path = require("path")
 const { app, httpServer } = require("./socket/socket")
 
 require("dotenv").config()
@@ -10,11 +11,12 @@ require("dotenv").config()
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static("dist"))
 
 app.use("/api/blogs", require("./routes/blog.routes"))
 
 app.use("*", (req, res) => {
-    res.status(404).json({ message: "Resource not found" })
+    res.sendFile(path.join(__dirname, "dist", "index.html"))
 })
 
 app.use((err, req, res, next) => {
